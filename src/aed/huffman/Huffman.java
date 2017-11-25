@@ -63,11 +63,11 @@ public class Huffman {
 
     
     private String findCharacterCode(Character ch, Position<Character> pos) {
-    	char left = '?';
-    	char right = '?';
+    	char left = '\u0000'; //Null character
+    	char right = '\u0000';
     	if(this.huffmanTree.hasLeft(pos)) left = this.huffmanTree.left(pos).element();
     	if(this.huffmanTree.hasRight(pos)) right = this.huffmanTree.right(pos).element();
-    	if(left == '?' && right == '?') return null;
+    	if(left == '\u0000' && right == '\u0000') return null;
     	if(left == ch) return "0";
     	if(right == ch) return "1";
     	String res = null;
