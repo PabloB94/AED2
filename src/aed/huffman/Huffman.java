@@ -63,21 +63,23 @@ public class Huffman {
 
     
     private String findCharacterCode(Character ch, Position<Character> pos) {
-    	if(pos.element() != ch){
-    		if(!this.huffmanTree.hasLeft(pos) && !this.huffmanTree.hasRight(pos)) return null;
-    		if(this.huffmanTree.left(pos).element() == ch) return "0";
-    		if(this.huffmanTree.right(pos).element() == ch) return "1";
-    		String res;
-    		if(this.huffmanTree.left(pos).element() == ' '){
-    			res = findCharacterCode(ch, this.huffmanTree.left(pos));
-    			if(res == null) return null;
-    			return "0" + res;
-    		}else{
-    			res = findCharacterCode(ch, this.huffmanTree.right(pos));
-    			if(res == null) return null;
-    			return "1" + res;
-    		}   		
-    	}else return "";   				     
+    	char left = '?';
+    	char right = '?';
+    	if(this.huffmanTree.hasLeft(pos)) left = this.huffmanTree.left(pos).element();
+    	if(this.huffmanTree.hasRight(pos)) right = this.huffmanTree.right(pos).element();
+    	if(left == '?' && right == '?') return null;
+    	if(left == ch) return "0";
+    	if(right == ch) return "1";
+    	String res = null;
+    	if(left == ' '){
+    		res = findCharacterCode(ch, this.huffmanTree.left(pos));
+    		if(res != null) return "0" + res;
+    	}
+    	if(right == ' '){
+    		res = findCharacterCode(ch, this.huffmanTree.right(pos));
+    		if(res != null) return "1" + res;    		
+    	}   		
+    	return res;   				     
     }
 
 
@@ -93,13 +95,19 @@ public class Huffman {
 		Position<Character> pos = this.huffmanTree.root();
 		for(char a : toDecode){
 			if(a == '0'){
-				text = text + this.huffmanTree.left(pos).element();
-				pos = this.huffmanTree.root();
-			}else if(pos.element() != ' '){
-				text = text + pos.element();
-				pos = this.huffmanTree.root();
+				if(this.huffmanTree.left(pos).element() == ' '){
+					pos = this.huffmanTree.left(pos);
+				}else{
+					text = text + this.huffmanTree.left(pos).element();
+					pos = this.huffmanTree.root();
+				}
 			}else{
-				pos = this.huffmanTree.right(pos);
+				if(this.huffmanTree.right(pos).element() == ' '){
+					pos = this.huffmanTree.right(pos);
+				}else{
+					text = text + this.huffmanTree.right(pos).element();
+					pos = this.huffmanTree.root();
+				}
 			}
 		}
 		return text;
