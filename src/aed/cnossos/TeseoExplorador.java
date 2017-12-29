@@ -4,6 +4,7 @@ import es.upm.aedlib.Pair;
 import es.upm.aedlib.positionlist.*;
 import es.upm.aedlib.Position;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 public class TeseoExplorador {
 	
@@ -20,10 +21,12 @@ public class TeseoExplorador {
 		PositionList<PuntoCardinal> toExplore;
 		toExplore = table.get(cnossos.printLocation());
 		if (toExplore == null){
-			PositionList<PuntoCardinal> aux = new NodePositionList<PuntoCardinal>();
+			toExplore = new NodePositionList<PuntoCardinal>();
 			Iterable<PuntoCardinal> caminos = cnossos.caminos();
-			caminos.forEach(item -> aux.addLast(item));
-			toExplore = aux;
+			Iterator<PuntoCardinal> it = caminos.iterator();
+			while(it.hasNext()){
+				toExplore.addLast(it.next());
+			}		
 		}
 		backtrack(toExplore, path);
 		if(toExplore.isEmpty()){
